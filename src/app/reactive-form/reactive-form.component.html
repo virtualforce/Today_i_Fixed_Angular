@@ -1,23 +1,23 @@
 <div class="card m-3">
   <h5 class="card-header">Angular Reactive Form Validation</h5>
   <div class="card-body">
-    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="contactForm" #form="ngForm" (ngSubmit)="!contactForm.invalid && onSubmit()">
       <div class="form-row">
 
         <div class="form-group col">
           <label>First Name</label>
           <input type="text" formControlName="firstname" class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && contactForm['controls']['firstname']['errors'] }" />
-          <div *ngIf="submitted && contactForm['controls']['firstname']['errors']" class="invalid-feedback">
-            <div *ngIf="contactForm['controls']['firstname']['errors']['required']">First Name is required</div>
+            [ngClass]="{ 'is-invalid': form.submitted && contactForm.get('firstname')?.errors }" />
+          <div *ngIf="contactForm.hasError('required','firstname')" class="invalid-feedback">
+            <div>First Name is required</div>
           </div>
         </div>
         <div class="form-group col">
           <label>Last Name</label>
           <input type="text" formControlName="lastname" class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && contactForm['controls']['firstname']['errors'] }" />
-          <div *ngIf="submitted && contactForm['controls']['firstname']['errors']" class="invalid-feedback">
-            <div *ngIf="contactForm['controls']['firstname']['errors']['required']">Last Name is required</div>
+            [ngClass]="{ 'is-invalid': form.submitted && contactForm.get('lastname')?.errors }" />
+          <div *ngIf="contactForm.hasError('required','lastname')" class="invalid-feedback">
+            <div >Last Name is required</div>
           </div>
         </div>
       </div>
@@ -26,25 +26,25 @@
         <div class="form-group col">
           <label>Email</label>
           <input type="text" formControlName="email" class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && contactForm['controls']['email']['errors'] }" />
-          <div *ngIf="submitted && contactForm['controls']['email']['errors']" class="invalid-feedback">
-            <div *ngIf="contactForm['controls']['email']['errors']['required']">Email is required</div>
-            <div *ngIf="contactForm['controls']['email']['errors']['email']">String must be a valid email address</div>
+            [ngClass]="{ 'is-invalid': form.submitted && contactForm.get('email')?.errors }" />
+          <div *ngIf="contactForm['controls']['email']['errors']" class="invalid-feedback">
+            <div *ngIf="contactForm.hasError('required','email')">Email is required</div>
+            <div *ngIf="contactForm.hasError('email','email')">String must be a valid email address</div>
           </div>
         </div>
 
         <div class="form-group col">
           <label>country</label>
           <select class="form-control" name="country" formControlName="country"
-            [ngClass]="{ 'is-invalid': submitted && contactForm['controls']['country']['errors'] }">
-            <option value="">Select</option>
+            [ngClass]="{ 'is-invalid': form.submitted && contactForm.get('country')?.errors }">
+            <option>Select</option>
             <option value="1">Pakistan</option>
             <option value="2">USA</option>
             <option value="3">England</option>
             <option value="4">Singapore</option>
           </select>
-          <div *ngIf="submitted && contactForm['controls']['country']['errors']" class="invalid-feedback">
-            <div *ngIf="contactForm['controls']['country']['errors']['required']">country is required</div>
+          <div *ngIf="contactForm.get('country')?.errors" class="invalid-feedback">
+            <div *ngIf="contactForm.hasError('required','country')">country is required</div>
           </div>
         </div>
 
@@ -54,10 +54,10 @@
         <div class="form-group col">
           <label>Password</label>
           <input type="password" formControlName="password" class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && contactForm['controls']['password']['errors'] }" />
-          <div *ngIf="submitted && contactForm['controls']['password']['errors']" class="invalid-feedback">
-            <div *ngIf="contactForm['controls']['password']['errors']['required']">Password is required</div>
-            <div *ngIf="contactForm['controls']['password']['errors']['minlength']">Password must be at least 6
+            [ngClass]="{ 'is-invalid': form.submitted && contactForm.get('password')?.errors }" />
+          <div *ngIf="contactForm.get('password')?.errors" class="invalid-feedback">
+            <div *ngIf="contactForm.hasError('required','password')">Password is required</div>
+            <div *ngIf="contactForm.hasError('minlength','password')">Password must be at least 6
               characters</div>
 
           </div>
@@ -65,28 +65,30 @@
         <div class="form-group col">
           <label>Confirm Password</label>
           <input type="password" formControlName="confirmPassword" class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && (contactForm['controls']['confirmPassword']['errors'] || passwordMatchValidator(contactForm, 'password', 'confirmPassword')) }" />
-          <div *ngIf="submitted && contactForm['controls']['confirmPassword']['errors']" class="invalid-feedback">
-            <div *ngIf="contactForm['controls']['confirmPassword']['errors']['required']">Confirm Password is required
+            [ngClass]="{ 'is-invalid': form.submitted && contactForm.get('confirmPassword')?.['errors']  }" />
+          <div *ngIf="form.submitted && contactForm.get('confirmPassword')?.['errors']" class="invalid-feedback">
+            <div *ngIf="contactForm.hasError('required','confirmPassword')">Confirm Password is required
             </div>
+            <div *ngIf="contactForm.hasError('minlength','confirmPassword')">Confirm Password must be at least 6
+              characters</div>
           </div>
-          <div class="invalid-feedback" *ngIf="passwordMatchValidator(contactForm, 'password', 'confirmPassword')">
-            Passwords don't match.
+          <div class="invalid-feedback" *ngIf="contactForm.hasError('confirmedValidator','confirmPassword')">
+            Passwords don't match
           </div>
         </div>
       </div>
 
       <div class="form-group form-check">
         <input type="checkbox" formControlName="acceptTerms" id="acceptTerms" class="form-check-input"
-          [ngClass]="{ 'is-invalid': submitted && contactForm['controls']['acceptTerms']['errors'] }" />
+          [ngClass]="{ 'is-invalid': form.submitted && contactForm.get('acceptTerms')?.errors }" />
         <label for="acceptTerms" class="form-check-label">Accept Terms & Conditions</label>
         <div
-          *ngIf="submitted &&  contactForm['controls']['acceptTerms']['errors'] && contactForm['controls']['acceptTerms']['errors']['required']"
+          *ngIf="contactForm.hasError('required','acceptTerms')"
           class="invalid-feedback">Accept Ts & Cs is required</div>
       </div>
       <div class="text-center">
         <button class="btn btn-primary mr-1">Register</button>
-        <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
+        <button class="btn btn-secondary" type="reset" (click)="onReset()">Clear form</button>
       </div>
     </form>
   </div>
