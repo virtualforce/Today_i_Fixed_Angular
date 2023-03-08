@@ -1,5 +1,5 @@
 ## Problem
-Subscribing to the observable manually in the `ngOnInit()` doesn’t work with `OnPush` change detection strategy out of the box. 
+Subscribing to the observable manually in the `ngOnInit()` doesn’t work with `OnPush` change detection strategy. 
 
 ## Environment
 - Angular version : Angular 2+
@@ -21,7 +21,7 @@ export class TodosComponent implements OnInit {
 } 
 
 //Component's template
-    <ul *ngIf="todos.length > 0">
-      <li *ngFor="let todo of todos">{{todo.name}}</li>
+    <ul *ngIf="(todos$ | async).length">
+      <li *ngFor="let todo of todos$ | async">{{todo.name}}</li>
     </ul> 
 ```
