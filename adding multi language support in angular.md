@@ -8,12 +8,12 @@
 
 ## Solution
 
-## intall libraries
+## 1. Installing libraries
 
 ``` npm install @ngx-translate/core ```
 ``` npm install @ngx-translate/http-loader ```
 
-## creating HttpLoaderFactory in appModule
+## 2. Creating HttpLoaderFactory in appModule
 
 ``` 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -21,7 +21,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 ```
-## import translate module in appModule along with other config
+## 3. Import translate module in appModule along with other config
 
 ``` 
 HttpClientModule,
@@ -34,7 +34,7 @@ TranslateModule.forRoot({
 }),
     
  ```
-## specify language used on load application
+## 4. Specify language used on load application
 
 ```
 add in module/component .ts file
@@ -43,18 +43,18 @@ constructor(private translateSrv : TranslateService){
     translateSrv.use('en');
 } 
 ```
-## generate translation json files
+## 5. Generate translation json files
 
 ```   in your app /src/assets create directory i8n and then create json file for languages which needs translation e.g en.json used for english, sv.json used for swedish etc.. ```
 
-## en.json translations 
+## 6. en.json translations 
 ``` 
     {
         "message": "Translated message from english"
     }
 ```
 
-## component HTML file
+## 7. Component HTML file
  ``` {{'message' | translate}} ```
 
  So in this case a 'Translated message from english' is showing as a translated message similary we can add multiple languages support by specify lanaguage in constructor along with JSON file in i8n directory.
